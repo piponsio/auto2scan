@@ -1,0 +1,6 @@
+[submodule "lib/LIDARLite_RaspberryPi_Library"]
+	path = lib/LIDARLite_RaspberryPi_Library
+	url = https://github.com/piponsio/LIDARLite_RaspberryPi_Library
+[submodule "lib/LazysoftCppLibrary"]
+	path = lib/LazysoftCppLibrary
+	url = https://github.com/piponsio/LazysoftCppLibrary
