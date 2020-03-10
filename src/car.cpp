@@ -5,10 +5,10 @@
 //#include <iostream>
 
 Car::Car(){
-	this->m1 = new Motor(pwmM1, 18, m1_cw, m1_ccw, encoderM1A, encoderM1B, true);
-	this->m2 = new Motor(pwmM2, 20, m2_cw, m2_ccw, encoderM2B, encoderM2A, false);
-	this->m3 = new Motor(pwmM3, 18, m3_cw, m3_ccw, encoderM3A, encoderM3B, true);
-	this->m4 = new Motor(pwmM4, 20, m4_cw, m4_ccw, 0, encoderM4A, false);
+	this->m1 = new Motor(pwmM1, 25, m1_cw, m1_ccw, encoderM1A, encoderM1B, true);
+	this->m2 = new Motor(pwmM2, 28, m2_cw, m2_ccw, encoderM2B, encoderM2A, false);
+	this->m3 = new Motor(pwmM3, 25, m3_cw, m3_ccw, encoderM3A, encoderM3B, true);
+	this->m4 = new Motor(pwmM4, 28, m4_cw, m4_ccw, 0, encoderM4A, false);
 	//Encoder del motor 4 dañado
 }
 
@@ -20,14 +20,14 @@ void Car::position(int x, int y){
 
 	timer = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch());
         now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch());
-	while( (now - timer) < std::chrono::microseconds(5000000)){ now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()); }
+	while( (now - timer) < std::chrono::microseconds(2000000)){ now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()); }
 
 	if(y > 0) this->spin(90);
 	if(y < 0) this->spin(-90);
 
 	timer = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch());
         now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch());
-	while( (now - timer) < std::chrono::microseconds(5000000)){ now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()); }
+	while( (now - timer) < std::chrono::microseconds(2000000)){ now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()); }
 
 	this->move( (y > 0) ? y : y*-1);
 

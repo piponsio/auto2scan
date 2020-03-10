@@ -24,12 +24,12 @@ int main(int argc,char** argv){
 		char path01[30];
 		strcpy(path01,argv[2]);
 		strcat(path01,"-01");
-
+/*
 		char path02[30];
 		strcpy(path02,argv[2]);
 		strcat(path02,"-02");
-
-		wallF.position(40,20);
+*/
+		wallF.position(50,30);
 
 		Scan::simple(storm32,path01,0.0,0.0,0.0);
 

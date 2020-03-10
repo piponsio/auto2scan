@@ -52,7 +52,7 @@ Yellow encoder -> B
 #define pwmM4 5
 
 #define countPerCM 264
-#define countPerDegrees 79
+#define countPerDegrees 65
 //#define countPerDegrees 76
 // 1 rev = 5550 encoder counts
 // 1 rev = 21 cm lineal
