@@ -1,9 +1,6 @@
 #ifndef _CAR_HPP_
 #define _CAR_HPP_
 
-//#include <wiringPi.h>
-//#include <softPwm.h>
-//#include <rotaryEncoder.hpp>
 #include <lazysoft/motor.hpp>
 #include <cstddef>
 #include <iostream>
@@ -53,26 +50,21 @@ Yellow encoder -> B
 
 #define countPerCM 264
 #define countPerDegrees 65
-//#define countPerDegrees 76
-// 1 rev = 5550 encoder counts
-// 1 rev = 21 cm lineal
-
-//#define leftPWM 4
-
-
-//#define rightPWM 5
 
 class Car{
-	public:
-		Car();
+	private:
 		Motor* m1 = NULL;
 		Motor* m2 = NULL;
 		Motor* m3 = NULL;
 		Motor* m4 = NULL;
 		int pwmValue;
-		void position(int x = 0, int y = 0);
-		void move(int cm = 0);
-		void spin(int degrees = 0);
 		void resetMotorsValue();
+		void spin(int degrees = 0, int info = 0);
+		void move(int cm = 0, int info = 0);
+		void printMotorInfo();
+
+	public:
+		Car();
+		void position(int x = 0, int y = 0);
 };
 #endif

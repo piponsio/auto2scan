@@ -1,31 +1,48 @@
 #include <scan.hpp>
-void Scan::simple(Storm32_command storm32, const char* outfile_name, double x_displacement = 0.0, double y_displacement = 0.0, double z_displacement = 0.0){
+Scan::Scan(const char* dev, speed_t baud, const char* outfile_name, bool xyz_file, bool info_file, int info){
 
-	std::string path_xyz = "data/";
-	path_xyz += outfile_name;
-	path_xyz += ".xyz";
+	this->my_storm32 = Storm32_command(dev, baud);
 
-	std::string path_info = "data/";
-	path_info += outfile_name;
-	path_info += ".info";
-//	std::cout << path_xyz << std::endl;
+	this->outfile_name = outfile_name;
+	this->xyz_file = xyz_file;
+	this->info_file = info_file;
+	this->info = info;
 
-	std::ofstream outfile_xyz;
-	std::ofstream outfile_info;
+	if(xyz_file == 1) this->updatePath(0);
+	if(info_file == 1) this->updatePath(1);
+}
+void Scan::updatePath(int mode){
 
-	storm32.setDataLogger(&outfile_info);
+	if(mode==0){
+		this->path_xyz = "data/";
+		this->path_xyz += this->outfile_name;
+		this->path_xyz += "-";
+		if(this->count_file < 10) this->path_xyz += "00";
+		else if(this->count_file < 100) this->path_xyz += "0";
+ 		this->path_xyz += std::to_string(this->count_file);
+		this->path_xyz += ".xyz";
+	}
+	if(mode==1){
+		this->path_info = "data/";
+		this->path_info += this->outfile_name;
+		this->path_info += "-";
+		if(this->count_file < 10) this->path_info += "00";
+		else if(this->count_file < 100) this->path_info += "0";
+ 		this->path_info += std::to_string(this->count_file);
+		this->path_info += ".info";
+	}
 
-	outfile_xyz.open(path_xyz);
-	outfile_info.open(path_info);
+}
+void Scan::simple(double x_displacement, double y_displacement, double z_displacement){
+
+	if(this->xyz_file == 1) this->outfile_xyz.open(this->path_xyz);
+	if(this->info_file == 1) this->outfile_info.open(this->path_info);
 
 	__u16 distance;
 	__u8  busyFlag;
 
 	myLidarLite.i2c_init();
 	myLidarLite.configure(0);
-
-	//Storm32_command storm32(dev, B9600);
-//	std::cout << "INIT VAR" << std::endl;
 
 	double pitch, yaw;
 	double x,y,z;
@@ -49,47 +66,50 @@ void Scan::simple(Storm32_command storm32, const char* outfile_name, double x_di
 
 	pitch = pitch_min;
 	yaw = yaw_min;
-//	std::cout << "INIT setAngle" << std::endl;
 
-	storm32.setAngle(pitch, 0.0, yaw);
-
-//	std::cout << "INIT loop" << std::endl;
+	this->my_storm32.setAngle(pitch, 0.0, yaw);
 
 	while(angles[0] >= pitch_max + pitch_tolerance || pitch_max < pitch){
 
-		storm32.getAngles();
-		angles[0] = storm32.angles[0];
-		angles[1] = storm32.angles[1];
-		angles[2] = storm32.angles[2];
+		this->my_storm32.getAngles();
+		angles[0] = this->my_storm32.angles[0];
+		angles[1] = this->my_storm32.angles[1];
+		angles[2] = this->my_storm32.angles[2];
 
-		std::cout << std::dec << angles[0] << "\t";
-		std::cout << std::dec << angles[1] << "\t";
-		std::cout << std::dec << angles[2] << "\t";
+		if(this->info == 2){
+			std::cout << std::dec << angles[0] << "\t";
+			std::cout << std::dec << angles[1] << "\t";
+			std::cout << std::dec << angles[2] << "\t";
 
-		std::cout << std::dec << pitch_flag << "\t";
-		std::cout << std::dec << yaw_flag << "\t";
+			std::cout << std::dec << pitch_flag << "\t";
+			std::cout << std::dec << yaw_flag << "\t";
 
-		std::cout << std::dec << pitch << "\t";
-		std::cout << std::dec << yaw << std::endl;
+			std::cout << std::dec << pitch << "\t";
+			std::cout << std::dec << yaw << std::endl;
 
-		outfile_info << std::dec << angles[0] << "\t";
-		outfile_info << std::dec << angles[1] << "\t";
-		outfile_info << std::dec << angles[2] << "\t";
+		}
 
-		outfile_info << std::dec << pitch_flag << "\t";
-		outfile_info << std::dec << yaw_flag << "\t";
+		if(this->info_file == 1){
+			this->outfile_info << std::dec << angles[0] << "\t";
+			this->outfile_info << std::dec << angles[1] << "\t";
+			this->outfile_info << std::dec << angles[2] << "\t";
 
-		outfile_info << std::dec << pitch << "\t";
-		outfile_info << std::dec << yaw << std::endl;
+			this->outfile_info << std::dec << pitch_flag << "\t";
+			this->outfile_info << std::dec << yaw_flag << "\t";
+
+			this->outfile_info << std::dec << pitch << "\t";
+			this->outfile_info << std::dec << yaw << std::endl;
+		}
 
 		if( ( (yaw-yaw_tolerance) <= angles[2]) && (angles[2] <= (yaw+yaw_tolerance) ) ){
 			if(yaw_flag == true && pitch_flag == 0){
 				pitch -= 1;
-				storm32.setAngle(pitch, 0.0, yaw);
-
-	//			std::cout << std::dec << angles[0] << "\t";
-	//			std::cout << std::dec << angles[1] << "\t";
-	//			std::cout << std::dec << angles[2] << std::endl;
+				this->my_storm32.setAngle(pitch, 0.0, yaw);
+				if(this->info == 1){
+					std::cout << std::dec << angles[0] << "\t";
+					std::cout << std::dec << angles[1] << "\t";
+					std::cout << std::dec << angles[2] << std::endl;
+				}
 			}
 			yaw_flag = false;
 
@@ -99,11 +119,12 @@ void Scan::simple(Storm32_command storm32, const char* outfile_name, double x_di
 		if( ( (pitch-pitch_tolerance) <= angles[0]) && (angles[0] <= (pitch+pitch_tolerance) )){
 			if(pitch_flag == true && yaw_flag == 0){
 				yaw = (yaw > 0)?(yaw_min):(yaw_max);
-				storm32.setAngle(pitch, 0.0, yaw);
-
-	//			std::cout << std::dec << +angles[0] << "\t";
-	//			std::cout << std::dec << +angles[1] << "\t";
-	//			std::cout << std::dec << +angles[2] << std::endl;
+				this->my_storm32.setAngle(pitch, 0.0, yaw);
+				if(this->info == 1){
+					std::cout << std::dec << +angles[0] << "\t";
+					std::cout << std::dec << +angles[1] << "\t";
+					std::cout << std::dec << +angles[2] << std::endl;
+				}
 			}
 			pitch_flag = false;
 		}
@@ -122,15 +143,17 @@ void Scan::simple(Storm32_command storm32, const char* outfile_name, double x_di
 			y = radio*sin(fi)*sin(theta);
 			z = radio*cos(fi);
 
-			//x = (distance/100.0)*sin((90+angles[0])*PI/180.0)*cos(angles[2]*PI/180.0);
-			//y = (distance/100.0)*sin((90+angles[0])*PI/180.0)*sin(angles[2]*PI/180.0);
-			//z = (distance/100.0)*cos((90+angles[0])*PI/180.0);
-
-			outfile_xyz << std::fixed << (x + x_displacement) << " ";
-			outfile_xyz << std::fixed << (y + y_displacement) << " ";
-			outfile_xyz << std::fixed << (z + z_displacement) << std::endl;
+			if(this->xyz_file == 1){
+				this->outfile_xyz << std::fixed << (x + x_displacement) << " ";
+				this->outfile_xyz << std::fixed << (y + y_displacement) << " ";
+				this->outfile_xyz << std::fixed << (z + z_displacement) << std::endl;
+			}
 		}
 	}
-	storm32.setAngle(0.0, 0.0, 0.0);
-	outfile_xyz.close();
+	this->my_storm32.setAngle(0.0, 0.0, 0.0);
+	this->count_file++;
+	this->updatePath(0);
+	this->updatePath(1);
+	if(this->xyz_file == 1) this->outfile_xyz.close();
+	if(this->info_file == 1) this->outfile_info.close();
 }
