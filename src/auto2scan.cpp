@@ -9,7 +9,10 @@ int main(int argc,char** argv){
 
 	if(argc != 3) std::cout << "Ingrese direccion y nombre de archivo de datos\n\r";
 	else{
-		Scan my_scan(argv[1],B9600,argv[2],true,true,1);
+//		Scan my_scan;
+		Scan my_scan(argv[1],B9600,argv[2]);
+//		Scan my_scan(argv[1],B9600,argv[2],true,true,1);
+//		Scan my_scan(argv[1],B9600,argv[2],false,false,0);
 		my_scan.simple();
 //		Car wallF;
 //genera segmentatio faul
