@@ -35,16 +35,16 @@ void Car::spin(int degrees, int info){
 
 	while(
 		(degrees > 0 &&
-			(  (*this->m1).value > totalCount*-1
-			|| (*this->m2).value < totalCount
-			|| (*this->m3).value > totalCount*-1
-			|| (*this->m4).value < totalCount)
+			(  (*this->m1).getValue() > totalCount*-1
+			|| (*this->m2).getValue() < totalCount
+			|| (*this->m3).getValue() > totalCount*-1
+			|| (*this->m4).getValue() < totalCount)
 		)
 		|| (degrees < 0 &&
-			(  (*this->m1).value < totalCount*-1
-			|| (*this->m2).value > totalCount
-			|| (*this->m3).value < totalCount*-1
-			|| (*this->m4).value > totalCount)
+			(  (*this->m1).getValue() < totalCount*-1
+			|| (*this->m2).getValue() > totalCount
+			|| (*this->m3).getValue() < totalCount*-1
+			|| (*this->m4).getValue() > totalCount)
 		)
 	){
 		if(degrees > 0){
@@ -71,16 +71,16 @@ void Car::move(int cm, int info){
 	int totalCount = countPerCM * cm;
 	while(
 		(cm > 0 &&
-			(  (*this->m1).value < totalCount
-			|| (*this->m2).value < totalCount
-			|| (*this->m3).value < totalCount
-			|| (*this->m4).value < totalCount)
+			(  (*this->m1).getValue() < totalCount
+			|| (*this->m2).getValue() < totalCount
+			|| (*this->m3).getValue() < totalCount
+			|| (*this->m4).getValue() < totalCount)
 		)
 		|| (cm < 0 &&
-			(  (*this->m1).value > totalCount
-			|| (*this->m2).value > totalCount
-			|| (*this->m3).value > totalCount
-			|| (*this->m4).value > totalCount)
+			(  (*this->m1).getValue() > totalCount
+			|| (*this->m2).getValue() > totalCount
+			|| (*this->m3).getValue() > totalCount
+			|| (*this->m4).getValue() > totalCount)
 		)
 	){
 		if(cm > 0){
@@ -109,15 +109,15 @@ void Car::resetMotorsValue(){
 	(*this->m3).stop();
 	(*this->m4).stop();
 
-	(*this->m1).value = 0;
-	(*this->m2).value = 0;
-	(*this->m3).value = 0;
-	(*this->m4).value = 0;
+	(*this->m1).setValue(0);
+	(*this->m2).setValue(0);
+	(*this->m3).setValue(0);
+	(*this->m4).setValue(0);
 }
 
 void Car::printMotorInfo(){
-	std::cout << "M1: " << (*this->m1).value << "(" << (*this->m1).pwm << ", " << digitalRead((*this->m1).pin_cw) << ", " << digitalRead((*this->m1).pin_ccw)  << ")" << " - ";
-	std::cout << "M2: " << (*this->m2).value << "(" << (*this->m2).pwm << ", " << digitalRead((*this->m2).pin_cw) << ", " << digitalRead((*this->m2).pin_ccw)  << ")" << " - ";
-	std::cout << "M3: " << (*this->m3).value << "(" << (*this->m3).pwm << ", " << digitalRead((*this->m3).pin_cw) << ", " << digitalRead((*this->m3).pin_ccw)  << ")" << " - ";
-	std::cout << "M4: " << (*this->m4).value << "(" << (*this->m4).pwm << ", " << digitalRead((*this->m4).pin_cw) << ", " << digitalRead((*this->m4).pin_ccw)  << ")" << std::endl;
+	std::cout << "M1: " << (*this->m1).getValue() << "(" << (*this->m1).getPWM() << ", " << digitalRead((*this->m1).getPinCW()) << ", " << digitalRead((*this->m1).getPinCCW())  << ")" << " - ";
+	std::cout << "M2: " << (*this->m2).getValue() << "(" << (*this->m2).getPWM() << ", " << digitalRead((*this->m2).getPinCW()) << ", " << digitalRead((*this->m2).getPinCCW())  << ")" << " - ";
+	std::cout << "M3: " << (*this->m3).getValue() << "(" << (*this->m3).getPWM() << ", " << digitalRead((*this->m3).getPinCW()) << ", " << digitalRead((*this->m3).getPinCCW())  << ")" << " - ";
+	std::cout << "M4: " << (*this->m4).getValue() << "(" << (*this->m4).getPWM() << ", " << digitalRead((*this->m4).getPinCW()) << ", " << digitalRead((*this->m4).getPinCCW())  << ")" << std::endl;
 }
