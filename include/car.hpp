@@ -1,10 +1,11 @@
 #ifndef _CAR_HPP_
 #define _CAR_HPP_
 
-#include <lazysoft/motor.hpp>
 #include <cstddef>
 #include <iostream>
 #include <chrono>
+
+#include <lazysoft/motor.hpp>
 
 /*
         SENSOR
@@ -21,25 +22,19 @@ Yellow encoder -> B
 
 #define encoderM1A 23
 #define encoderM1B 22
-
 #define encoderM2A 27
 #define encoderM2B 26
-
 #define encoderM3A 25
 #define encoderM3B 24
-
 #define encoderM4A 29
 #define encoderM4B 28
 
 #define m1_cw 31
 #define m1_ccw 14
-
 #define m2_cw 12
 #define m2_ccw 6
-
 #define m3_cw 30
 #define m3_ccw 21
-
 #define m4_cw 10
 #define m4_ccw 13
 
@@ -53,15 +48,18 @@ Yellow encoder -> B
 
 class Car{
 	private:
+		int pwmValue;
+
 		Motor* m1 = NULL;
 		Motor* m2 = NULL;
 		Motor* m3 = NULL;
 		Motor* m4 = NULL;
-		int pwmValue;
-		void resetMotorsValue();
+
 		void spin(int degrees = 0, int info = 0);
 		void move(int cm = 0, int info = 0);
+		void resetMotorsValue();
 		void printMotorInfo();
+
 
 	public:
 		Car();
