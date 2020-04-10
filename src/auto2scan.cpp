@@ -13,7 +13,8 @@ int main(int argc,char** argv){
 		Scan my_scan(argv[1],B9600,argv[2],true,true,false,1);
 //		Scan my_scan(argv[1],B9600,argv[2],true,true,1);
 //		Scan my_scan(argv[1],B9600,argv[2],false,false,0);
-		my_scan.simple(1.70,0.27,1.06);
+		my_scan.simple(1.62,2.17,0.57);
+	//todo x 10 cm +
 //		Car wallF;
 //genera segmentatio faul
 /*		Serial com(argv[1], B9600);
