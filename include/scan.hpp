@@ -19,7 +19,7 @@ class Scan{
 		bool xyz_log = true;
 		bool info_log = false;
 		bool storm32_log = false;
-		int info = 0;
+		int info = 1;
 
 		Storm32_command my_storm32;
 
